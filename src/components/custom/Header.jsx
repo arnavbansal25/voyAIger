@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -11,10 +11,6 @@ import { SignInDialog } from "./SignInDialog";
 export const Header = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [openDialog, setOpenDialog] = useState(false);
-
-  useEffect(() => {
-    console.log("11", user);
-  }, [user]);
 
   const logout = () => {
     googleLogout();

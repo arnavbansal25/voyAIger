@@ -14,7 +14,7 @@ import axios from "axios";
 
 export const SignInDialog = ({ open, callBack }) => {
   const getUserProfile = (tokenInfo) => {
-    console.log("5566", tokenInfo);
+    console.log("tokenInfo", tokenInfo);
     axios
       .get(
         `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${tokenInfo?.access_token}`,
@@ -34,7 +34,7 @@ export const SignInDialog = ({ open, callBack }) => {
 
   const login = useGoogleLogin({
     onSuccess: (codeResp) => getUserProfile(codeResp),
-    onError: (error) => console.log("555", error),
+    onError: (error) => console.log("Error:", error),
   });
 
   return (
