@@ -39,7 +39,7 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-10">
       <GoogleOAuthProvider
         clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}
       >

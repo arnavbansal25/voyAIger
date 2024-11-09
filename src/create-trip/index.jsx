@@ -152,7 +152,7 @@ export const CreateTrip = () => {
         </div>
       </div>
 
-      <div className="my-10 flex justify-end">
+      <div className="mt-10 flex justify-end">
         {isLoggedIn ? (
           <Button disable={loading} onClick={onGenerateTrip}>
             {loading ? (

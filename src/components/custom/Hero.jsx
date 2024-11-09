@@ -22,7 +22,7 @@ export function Hero() {
         <Button>Get Started, It's Free</Button>
       </Link>
 
-      <div className="-mt-32">
+      <div>
         <img src={mockUp} alt="mockup-interface-img" />
       </div>
     </div>
