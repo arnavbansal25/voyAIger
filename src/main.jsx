@@ -2,7 +2,11 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "@/index.css";
 import App from "@/App.jsx";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import { CreateTrip } from "./create-trip";
 import { ViewTrip } from "./view-trip/[tripId]";
 import { Header } from "@/components/custom/Header";
@@ -27,6 +31,10 @@ const router = createBrowserRouter([
     path: "/my-trips",
     element: <MyTrips />,
   },
+  {
+    path: "*",
+    element: <Navigate to="/" replace />,
+  },
 ]);
 
 createRoot(document.getElementById("root")).render(
@@ -36,7 +44,7 @@ createRoot(document.getElementById("root")).render(
         clientId={import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID}
       >
         <Header />
-        <Toaster />
+        <Toaster position="top-center" />
         <RouterProvider router={router} />
       </GoogleOAuthProvider>
     </div>

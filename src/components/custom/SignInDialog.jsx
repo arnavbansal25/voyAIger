@@ -12,9 +12,8 @@ import { Button } from "@/components/ui/button";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 
-export const SignInDialog = ({ open, callBack }) => {
+export const SignInDialog = ({ triggerComp, callBack = () => {} }) => {
   const getUserProfile = (tokenInfo) => {
-    console.log("tokenInfo", tokenInfo);
     axios
       .get(
         `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${tokenInfo?.access_token}`,
@@ -26,7 +25,6 @@ export const SignInDialog = ({ open, callBack }) => {
         }
       )
       .then((resp) => {
-        console.log(resp);
         localStorage.setItem("user", JSON.stringify(resp?.data));
         callBack();
       });
@@ -38,22 +36,25 @@ export const SignInDialog = ({ open, callBack }) => {
   });
 
   return (
-    <Dialog open={open}>
+    <Dialog>
+      <DialogTrigger asChild>{triggerComp}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogDescription>
+          <DialogTitle>
             <img src="/logo.svg" alt="Application Logo" />
-            <h2 className="font-bold text-lg mt-7">Sgn In With Google</h2>
-            <p>Sign in to te App with Google Authentication securely</p>
-
-            <Button
-              className="w-full mt-5 flex gap-4 items-center"
-              onClick={login}
-            >
-              <FcGoogle className="w-7 h-7" /> Sign In With Google
-            </Button>
-          </DialogDescription>
+          </DialogTitle>
         </DialogHeader>
+        <DialogDescription>
+          <div className="font-bold text-lg mt-7">Sign In With Google</div>
+          <div>Sign in to VoyAIger with Google Authentication securely.</div>
+
+          <Button
+            className="w-full mt-5 flex gap-4 items-center"
+            onClick={login}
+          >
+            <FcGoogle className="w-7 h-7" /> Sign In With Google
+          </Button>
+        </DialogDescription>
       </DialogContent>
     </Dialog>
   );

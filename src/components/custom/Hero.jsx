@@ -18,8 +18,8 @@ export function Hero() {
         itineraries tailored to your interest and budget.
       </p>
 
-      <Link to="/create-trip" className="">
-        <Button> Get Started, It's Free </Button>
+      <Link to="/create-trip" className="cursor-pointer z-10">
+        <Button>Get Started, It's Free</Button>
       </Link>
 
       <div className="-mt-32">

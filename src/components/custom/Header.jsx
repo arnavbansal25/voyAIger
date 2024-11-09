@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -7,19 +7,16 @@ import {
 } from "@/components/ui/popover";
 import { googleLogout } from "@react-oauth/google";
 import { SignInDialog } from "./SignInDialog";
+import { useIsLoggedIn } from "@/hooks/useIsLoggedIn";
 
 export const Header = () => {
+  const isLoggedIn = useIsLoggedIn();
   const user = JSON.parse(localStorage.getItem("user"));
-  const [openDialog, setOpenDialog] = useState(false);
 
   const logout = () => {
     googleLogout();
     localStorage.clear();
     window.location.reload();
-  };
-
-  const login = () => {
-    setOpenDialog(true);
   };
 
   return (
@@ -29,7 +26,7 @@ export const Header = () => {
         <span className="font-bold text-xl">VoyAIger</span>
       </a>
       <div>
-        {user ? (
+        {isLoggedIn ? (
           <div className="flex items-center gap-3">
             <a href="/create-trip" className="text-black">
               <Button variant="outline" className="rounded-full">
@@ -57,19 +54,14 @@ export const Header = () => {
             </Popover>
           </div>
         ) : (
-          <Button onClick={login}>Sign In</Button>
+          <SignInDialog
+            triggerComp={<Button>Sign In</Button>}
+            callBack={() => {
+              window.location.reload();
+            }}
+          />
         )}
       </div>
-
-      {openDialog && (
-        <SignInDialog
-          open={openDialog}
-          callBack={() => {
-            setOpenDialog(false);
-            window.location.reload();
-          }}
-        />
-      )}
     </div>
   );
 };

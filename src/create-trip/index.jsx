@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
-import GooglePlacesAutocomplete from "react-google-places-autocomplete";
-import { AI_PROMPT, budgetOptions, travelerOptions } from "@/constants/options";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { chatSession } from "@/service/AIModel";
-import axios from "axios";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "@/service/firebaseConfig";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { doc, setDoc } from "firebase/firestore";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+
+import { db } from "@/service/firebaseConfig";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { chatSession } from "@/service/AIModel";
+import { useIsLoggedIn } from "@/hooks/useIsLoggedIn";
 import { SignInDialog } from "@/components/custom/SignInDialog";
+import { AI_PROMPT, budgetOptions, travelerOptions } from "@/constants/options";
 
 export const CreateTrip = () => {
   const [place, setPlace] = useState();
-
   const [formData, setFormData] = useState([]);
-  const [openDialog, setOpenDialog] = useState(false);
-
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const isLoggedIn = useIsLoggedIn();
 
   const handleInputChange = (name, value) => {
     setFormData({
@@ -30,13 +30,6 @@ export const CreateTrip = () => {
 
   const onGenerateTrip = async () => {
     setLoading(true);
-    const user = localStorage.getItem("user");
-
-    if (!user) {
-      setOpenDialog(true);
-      setLoading(false);
-      return;
-    }
 
     if (
       formData?.noOfDays > 5 ||
@@ -159,24 +152,23 @@ export const CreateTrip = () => {
       </div>
 
       <div className="my-10 flex justify-end">
-        <Button disable={loading} onClick={onGenerateTrip}>
-          {loading ? (
-            <AiOutlineLoading3Quarters className="h-7 w-7 animate-spin" />
-          ) : (
-            "Generate Trip"
-          )}
-        </Button>
+        {isLoggedIn ? (
+          <Button disable={loading} onClick={onGenerateTrip}>
+            {loading ? (
+              <AiOutlineLoading3Quarters className="h-7 w-7 animate-spin" />
+            ) : (
+              "Generate Trip"
+            )}
+          </Button>
+        ) : (
+          <SignInDialog
+            triggerComp={<Button>Sign In to Generate Trip</Button>}
+            callBack={() => {
+              window.location.reload();
+            }}
+          />
+        )}
       </div>
-
-      {openDialog && (
-        <SignInDialog
-          open={openDialog}
-          callBack={() => {
-            setOpenDialog(false);
-            onGenerateTrip();
-          }}
-        />
-      )}
     </div>
   );
 };
