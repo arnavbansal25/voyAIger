@@ -33,11 +33,12 @@ export const CreateTrip = () => {
 
     if (
       !formData?.noOfDays ||
+      formData?.noOfDays < 1 ||
       !formData?.location ||
       !formData?.budget ||
       !formData?.travellers
     ) {
-      toast("Please fill all details!");
+      toast("Please fill all details correctly!");
       setLoading(false);
       return;
     }
