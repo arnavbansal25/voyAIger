@@ -32,7 +32,7 @@ export const CreateTrip = () => {
     setLoading(true);
 
     if (
-      formData?.noOfDays > 5 ||
+      !formData?.noOfDays ||
       !formData?.location ||
       !formData?.budget ||
       !formData?.travellers
