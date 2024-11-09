@@ -51,9 +51,9 @@ export const InfoSection = ({ trip }) => {
             </h2>
           </div>
         </div>
-        <Button>
+        {/* <Button>
           <IoIosSend />
-        </Button>
+        </Button> */}
       </div>
     </div>
   );
