@@ -8,7 +8,7 @@ const PlacesToVisit = ({ trip }) => {
 
       <div className="mt-5">
         {trip?.tripData?.travelPlan?.itinerary?.map((item, inde) => (
-          <div>
+          <div className="mt-5">
             <h2 className="font-medium text-lg">Day {item?.day}</h2>
             <div className="grid md:grid-cols-2 gap-5">
               {item?.places?.map((place, placeIndex) => (
