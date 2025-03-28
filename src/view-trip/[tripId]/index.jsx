@@ -24,7 +24,7 @@ export const ViewTrip = () => {
     const docRef = doc(db, "Trips", tripId);
     const docSnap = await getDoc(docRef);
 
-    if (docSnap) {
+    if (docSnap.exists()) {
       setTrip(docSnap.data());
     } else {
       toast("No trip found!");

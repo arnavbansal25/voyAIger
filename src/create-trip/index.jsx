@@ -8,7 +8,8 @@ import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { db } from "@/service/firebaseConfig";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { chatSession } from "@/service/AIModel";
+import { generateTripPlan } from "@/service/AIModel";
+import { normalizeTripData } from "@/service/normalizeTripData";
 import { useIsLoggedIn } from "@/hooks/useIsLoggedIn";
 import { SignInDialog } from "@/components/custom/SignInDialog";
 import { AI_PROMPT, budgetOptions, travelerOptions } from "@/constants/options";
@@ -52,18 +53,24 @@ export const CreateTrip = () => {
       .replace("{budget}", formData?.budget)
       .replace("{totalDays}", formData?.noOfDays);
 
-    const result = await chatSession.sendMessage(FINAL_PROMPT);
-
-    saveAiTrip(result?.response?.text());
+    try {
+      const rawTrip = await generateTripPlan(FINAL_PROMPT);
+      await saveAiTrip(rawTrip);
+    } catch (error) {
+      console.error(error);
+      toast.error(error?.message || "Failed to generate trip. Please try again.");
+      setLoading(false);
+    }
   };
 
   const saveAiTrip = async (tripData) => {
     const user = JSON.parse(localStorage.getItem("user"));
+    const normalized = normalizeTripData(tripData);
 
     const docId = Date.now().toString();
     await setDoc(doc(db, "Trips", docId), {
       userSelection: formData,
-      tripData: JSON.parse(tripData),
+      tripData: normalized,
       userEmail: user?.email,
       id: docId,
     });

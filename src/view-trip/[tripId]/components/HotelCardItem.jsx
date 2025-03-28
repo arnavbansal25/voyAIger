@@ -1,4 +1,5 @@
 import { getPlaceDetails, PHOTO_REF_URL } from "@/service/GlobalApi";
+import { getPlacePhotoName } from "@/service/placePhotos";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import hotelImg from "@/assets/hotel.jpg";
@@ -15,14 +16,15 @@ export const HotelCardItem = ({ hotel }) => {
       textQuery: hotel?.hotelName,
     };
 
-    const result = await getPlaceDetails(data).then((res) => {
-      const photoUrl = PHOTO_REF_URL.replace(
-        "{NAME}",
-        res.data.places[0].photos[3].name
-      );
-
-      setPhotoUrl(photoUrl);
-    });
+    try {
+      const res = await getPlaceDetails(data);
+      const photoName = getPlacePhotoName(res);
+      if (photoName) {
+        setPhotoUrl(PHOTO_REF_URL.replace("{NAME}", photoName));
+      }
+    } catch {
+      /* fallback to hotelImg */
+    }
   };
 
   return (

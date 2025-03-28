@@ -51,4 +51,4 @@ export const budgetOptions = [
 ];
 
 export const AI_PROMPT =
-  "Generate Travel Plan for Location : {location}, for {totalDays} Days for {travellers} People with a {budget} budget. Give me hotel options list with hotelName, hotel address, price, hotel image url, geo coordinates, rating, description. Suggest intinerary for all {totalDays} days with placeName, place details, place image url, geo coordinates, ticket pricing, best time to visit, opening hours in JSON format. All keys in JSON sohuld follow camelcasing.";
+  'Generate a travel plan for {location}, for {totalDays} days, for {travellers}, with a {budget} budget. Return ONLY valid JSON (no markdown) in this exact shape: {"travelPlan":{"hotels":[{"hotelName":"","hotelAddress":"","price":"","hotelImageUrl":"","geoCoordinates":{"lat":0,"lng":0},"rating":"","description":""}],"itinerary":[{"day":1,"places":[{"placeName":"","placeDetails":"","placeImageUrl":"","geoCoordinates":{"lat":0,"lng":0},"ticketPricing":"","bestTimeToVisit":"","openingHours":""}]}]}}. Include at least 4 hotels and a full {totalDays}-day itinerary. All keys must use camelCase.';

@@ -1,21 +1,21 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+const GENERATE_URL = "/api/gemini/generate";
 
-const apiKey = import.meta.env.VITE_GOOGLE_GEMINI_AI_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey);
+export async function generateTripPlan(prompt) {
+  const response = await fetch(GENERATE_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt }),
+  });
 
-const model = genAI.getGenerativeModel({
-  model: "gemini-3.5-flash",
-});
+  const data = await response.json().catch(() => ({}));
 
-const generationConfig = {
-  temperature: 1,
-  topP: 0.95,
-  topK: 64,
-  maxOutputTokens: 8192,
-  responseMimeType: "application/json",
-};
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to generate trip plan");
+  }
 
-export const chatSession = model.startChat({
-  generationConfig,
-  history: [],
-});
+  if (!data.text) {
+    throw new Error("Empty response from trip planner");
+  }
+
+  return data.text;
+}

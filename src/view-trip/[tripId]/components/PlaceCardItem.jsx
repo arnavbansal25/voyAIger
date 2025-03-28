@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { getPlaceDetails, PHOTO_REF_URL } from "@/service/GlobalApi";
+import { getPlacePhotoName } from "@/service/placePhotos";
 import React, { useEffect, useState } from "react";
 import { FaMapLocationDot } from "react-icons/fa6";
 import { Link } from "react-router-dom";
@@ -17,14 +18,15 @@ export const PlaceCardItem = ({ place }) => {
       textQuery: place?.placeName,
     };
 
-    const result = await getPlaceDetails(data).then((res) => {
-      const photoUrl = PHOTO_REF_URL.replace(
-        "{NAME}",
-        res.data.places[0].photos[3].name
-      );
-
-      setPhotoUrl(photoUrl);
-    });
+    try {
+      const res = await getPlaceDetails(data);
+      const photoName = getPlacePhotoName(res);
+      if (photoName) {
+        setPhotoUrl(PHOTO_REF_URL.replace("{NAME}", photoName));
+      }
+    } catch {
+      /* fallback to placeImg */
+    }
   };
 
   return (
